@@ -32,13 +32,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.Extension;
 import hudson.FilePath;
@@ -67,7 +66,6 @@ public class AndroidSDKInstaller extends DownloadFromUrlInstaller {
 
     public class AndroidSDKInstallable extends NodeSpecificInstallable {
 
-        @SuppressFBWarnings(value = "EI_EXPOSE_REP2")
         public AndroidSDKInstallable(Installable inst) {
             super(inst);
         }
@@ -167,7 +165,7 @@ public class AndroidSDKInstaller extends DownloadFromUrlInstaller {
         }
     }
 
-    private void installBasePackages(FilePath sdkRoot, TaskListener log) throws IOException, InterruptedException {
+    private void installBasePackages(FilePath sdkRoot, @NonNull TaskListener log) throws IOException, InterruptedException {
         FilePath sdkmanager = sdkRoot.child("tools").child("bin").child("sdkmanager" + platform.extension);
         if (!sdkmanager.exists()) {
             sdkmanager = sdkRoot.child("cmdline-tools").child("bin").child("sdkmanager" + platform.extension);
@@ -194,7 +192,7 @@ public class AndroidSDKInstaller extends DownloadFromUrlInstaller {
                     }
                     return defaultPackage.equals(i.getId());
                 })) //
-                .collect(Collectors.toList());
+                .toList();
 
         if (!defaultPackages.isEmpty()) {
             // get component with the available latest version
@@ -211,7 +209,9 @@ public class AndroidSDKInstaller extends DownloadFromUrlInstaller {
                     // remove release candidate versions for stable channel
                     .filter(p -> channel != Channel.STABLE || p.getVersion().getQualifier() == null) //
                     .sorted(Collections.reverseOrder()) // in case of wildcards we takes latest version
-                    .findFirst().get().getId()));
+                    .findFirst()
+                    .get()
+                    .getId()));
 
             SDKManagerCLIBuilder.with(sdkmanager) //
                     .proxy(Jenkins.get().proxy) //
@@ -245,7 +245,7 @@ public class AndroidSDKInstaller extends DownloadFromUrlInstaller {
             return Messages.AndroidSDKInstaller_displayName();
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public List<? extends Installable> getInstallables() throws IOException {
             List<Installable> installables = Collections.emptyList();

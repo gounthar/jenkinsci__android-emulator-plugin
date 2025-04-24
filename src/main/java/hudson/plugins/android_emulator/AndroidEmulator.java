@@ -42,7 +42,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -104,7 +104,6 @@ public class AndroidEmulator extends BuildWrapper implements Serializable {
 
 
     @DataBoundConstructor
-    @SuppressFBWarnings("EI_EXPOSE_REP2")
     public AndroidEmulator(String avdName, String osVersion, String screenDensity,
             String screenResolution, String deviceLocale, String sdCardSize,
             HardwareProperty[] hardwareProperties, boolean wipeData, boolean showWindow,
@@ -838,7 +837,7 @@ public class AndroidEmulator extends BuildWrapper implements Serializable {
         private static final long serialVersionUID = 1L;
 
         /**
-         * The Android SDK home directory.  Can include variables, e.g. <tt>${ANDROID_HOME}</tt>.
+         * The Android SDK home directory.  Can include variables, e.g. {@code ${ANDROID_HOME}}.
          * <p>If <code>null</code>, we will just assume the required commands are on the PATH.</p>
          */
         public String androidHome;
@@ -1029,8 +1028,8 @@ public class AndroidEmulator extends BuildWrapper implements Serializable {
         }
 
         public FormValidation doCheckScreenResolution(@QueryParameter String value,
-                @QueryParameter String density, @QueryParameter String osVersion) {
-            return doCheckScreenResolution(value, density, osVersion, true).getFormValidation();
+                @QueryParameter String screenDensity, @QueryParameter String osVersion) {
+            return doCheckScreenResolution(value, screenDensity, osVersion, true).getFormValidation();
         }
 
         private ValidationResult doCheckScreenResolution(String resolution, String density,

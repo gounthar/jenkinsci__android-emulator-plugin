@@ -27,13 +27,13 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 import hudson.EnvVars;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
 import hudson.model.Computer;
 import hudson.model.EnvironmentSpecific;
@@ -78,7 +78,6 @@ public class AndroidSDKInstallation extends ToolInstallation implements Environm
     /**
      * Gets a locator for CLI executables installed by this tool.
      *
-     * @param launcher a way to start processes
      * @return a locator for CLI executables for this tool
      * @throws IOException if something goes wrong
      */
@@ -125,7 +124,7 @@ public class AndroidSDKInstallation extends ToolInstallation implements Environm
         return bin;
     }
 
-    @Nonnull
+    @NonNull
     private Platform getPlatform() throws DetectionFailedException {
         Platform currentPlatform = platform;
 
@@ -167,9 +166,8 @@ public class AndroidSDKInstallation extends ToolInstallation implements Environm
             return Collections.singletonList(new AndroidSDKInstaller(null, Channel.STABLE));
         }
 
-        /*
-         * (non-Javadoc)
-         * @see hudson.tools.Descriptor#configure(org.kohsuke.stapler.StaplerRequest, net.sf.json.JSONObject)
+        /**
+         * see {@link hudson.model.Descriptor#configure(org.kohsuke.stapler.StaplerRequest, net.sf.json.JSONObject)}
          */
         @Override
         public boolean configure(StaplerRequest req, JSONObject json) throws hudson.model.Descriptor.FormException {

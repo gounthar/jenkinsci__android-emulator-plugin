@@ -27,15 +27,17 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.tools.ant.filters.StringInputStream;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.EnvVars;
 import hudson.FilePath;
@@ -44,7 +46,6 @@ import hudson.Proc;
 import hudson.model.TaskListener;
 import hudson.util.ArgumentListBuilder;
 import hudson.util.ForkOutputStream;
-import hudson.util.NullStream;
 import hudson.util.StreamTaskListener;
 
 public class CLICommand<R> {
@@ -66,7 +67,6 @@ public class CLICommand<R> {
         this.env = env;
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP")
     public ArgumentListBuilder arguments() {
         return arguments;
     }
@@ -82,10 +82,10 @@ public class CLICommand<R> {
     }
 
     public R execute() throws IOException, InterruptedException {
-        return execute(new StreamTaskListener(new NullStream()));
+        return execute(new StreamTaskListener(OutputStream.nullOutputStream(), StandardCharsets.UTF_8));
     }
 
-    public R execute(@Nonnull TaskListener output) throws IOException, InterruptedException {
+    public R execute(@NonNull TaskListener output) throws IOException, InterruptedException {
         List<String> args = getArguments();
 
         // command.createLauncher(output)
@@ -97,15 +97,11 @@ public class CLICommand<R> {
                 .masks(getMasks(args.size()));
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (output != null) {
-            if (parser != null) {
-                // clone output to make content available to the parser
-                starter.stdout(new ForkOutputStream(output.getLogger(), baos));
-            } else {
-                starter.stdout(output);
-            }
-        } else if (parser != null) {
-            starter.stdout(baos);
+        if (parser != null) {
+            // clone output to make content available to the parser
+            starter.stdout(new ForkOutputStream(output.getLogger(), baos));
+        } else {
+            starter.stdout(output);
         }
 
         int exitCode = starter.join();

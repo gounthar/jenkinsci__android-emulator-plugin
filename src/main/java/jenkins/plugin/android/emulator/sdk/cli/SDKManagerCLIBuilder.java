@@ -35,12 +35,12 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.EnvVars;
 import hudson.FilePath;
@@ -184,7 +184,6 @@ public class SDKManagerCLIBuilder {
 
     private final FilePath executable;
     private ProxyConfiguration proxy;
-    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     private String sdkRoot;
     private Channel channel;
     private boolean verbose;
@@ -197,11 +196,10 @@ public class SDKManagerCLIBuilder {
         this.executable = sdkmanager;
     }
 
-    public static SDKManagerCLIBuilder with(@Nonnull FilePath sdkmanager) {
+    public static SDKManagerCLIBuilder with(@NonNull FilePath sdkmanager) {
         return new SDKManagerCLIBuilder(sdkmanager);
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2")
     public SDKManagerCLIBuilder proxy(ProxyConfiguration proxy) {
         this.proxy = proxy;
         return this;
@@ -246,7 +244,7 @@ public class SDKManagerCLIBuilder {
 
         arguments.add(ARG_INSTALL);
         for (String p : packages) {
-            arguments.addQuoted(p);
+            arguments.add(p);
         }
 
         EnvVars env = new EnvVars();

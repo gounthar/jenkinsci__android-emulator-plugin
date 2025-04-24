@@ -4,8 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -21,7 +21,7 @@ import hudson.util.Secret;
 /**
  * Build a command line argument for emulator command.
  * 
- * @see https://developer.android.com/studio/run/emulator-commandline
+ * @see <a href="https://developer.android.com/studio/run/emulator-commandline">Start the emulator from the command line</a>
  * @author Nikolas Falco
  */
 public class EmulatorCLIBuilder {
@@ -82,7 +82,6 @@ public class EmulatorCLIBuilder {
         return this;
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2")
     public EmulatorCLIBuilder proxy(ProxyConfiguration proxy) {
         this.proxy = proxy;
         return this;
