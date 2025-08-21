@@ -14,7 +14,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.jvnet.hudson.test.Issue;
 
 import hudson.EnvVars;
@@ -244,19 +244,15 @@ class UtilsTest {
     }
 
     private void writeContentToTestFile(final File file, final String content) throws Exception {
-        final PrintWriter writer = new PrintWriter(file);
-        writer.print(content);
-        writer.close();
+        try (PrintWriter writer = new PrintWriter(file)) {
+            writer.print(content);
+        }
     }
 
     private String readFirstLineOfFile(final File file) throws Exception {
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        final String firstLine = bufferedReader.readLine();
-        bufferedReader.close();
-        fileReader.close();
-
-        return firstLine;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            return bufferedReader.readLine();
+        }
     }
 
     @Test
